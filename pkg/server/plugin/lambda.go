@@ -88,7 +88,7 @@ func (h *LambdaHandler) Handle(payload *router.Payload, response *router.Respons
 		return
 	}
 
-	result := map[string]interface{}{}
+	var result json.RawMessage
 	err = json.Unmarshal(outbytes, &result)
 	if err != nil {
 		response.Err = skyerr.MakeError(err)
@@ -97,7 +97,7 @@ func (h *LambdaHandler) Handle(payload *router.Payload, response *router.Respons
 	log.WithFields(logrus.Fields{
 		"name":   h.Name,
 		"input":  payload.Data,
-		"result": result,
+		"result": string(result),
 		"err":    err,
 	}).Debugf("Executed a lambda with result")
 
